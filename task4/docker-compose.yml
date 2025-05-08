@@ -1,12 +1,21 @@
-services:
-  web:
-    build: ./front-end
-    ports:
-      - "9000:9000"
-    depends_on:
-      - backend
+version: '3.8'
 
-  backend:
-    build: ./back-end
+services:
+  front-end:
+    build:
+      context: ./front-end
     ports:
-      - "5252:5252"
+      - "9000:80"
+    volumes:
+      - ./front-end:/usr/share/nginx/html
+    depends_on:
+      - back-end
+  
+  back-end:
+    build:
+      context: ./back-end
+    ports:
+      - "5000:5000"
+    environment:
+      FLASK_APP: api.py
+      FLASK_ENV: production
